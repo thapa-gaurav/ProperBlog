@@ -24,7 +24,6 @@ class PostRequest extends FormRequest
         return [
             'caption'=>['required'],
             'text'=>['required'],
-            'image'=>['required','mimes:png,jpeg,jpg']
         ];
     }
 }

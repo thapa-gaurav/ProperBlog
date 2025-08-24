@@ -28,19 +28,23 @@ class PostController extends Controller
             $media = MediaUploader::fromSource($request->file('image'))->withAltAttribute('alt images')->setAllowedAggregateTypes([Media::TYPE_IMAGE])->upload();
             $post->attachMedia($media,'image');
         }
+        activity()->on($post)->by(auth()->user())->log('Created new post');
         return \response()->json(['message'=>'New post created Successfully']);
     }
 
     public function show($id){
         $post = Post::findOrFail($id);
+        activity()->on($post)->by(auth()->user())->log('Viewed one post.');
         return new PostResource($post);
     }
 
     public function update($id,PostRequest $request){
+        dd($request);
         $request->validated();
         if(auth()->user()->hasPermissionTo('update post')){
             $post = Post::findOrFail($id);
             $post->update($request->validated());
+            activity()->on($post)->by(auth()->user())->log('Update one post.');
             return \response()->json(['message'=>'post edited successfully.']);
         }
         return response('Access denied.',Response::HTTP_FORBIDDEN);
@@ -50,6 +54,7 @@ class PostController extends Controller
     {
             $post = Post::findOrFail($id);
             $post->delete();
+            activity()->on($post)->by(auth()->user())->log('Deleted one post.');
             return response()->json(['msg'=>'Post deletion complete.']);
 
     }
@@ -62,6 +67,7 @@ class PostController extends Controller
                 $media = MediaUploader::fromSource($request->file('image'))->withAltAttribute('alt images')->setAllowedAggregateTypes([Media::TYPE_IMAGE])->upload();
                 $post = Post::withMedia('image')->findOrFail($id);
                 $post->syncMedia($media,'image');
+                activity()->on($post)->by(auth()->user())->log('Changed image of post.');
                 return \response()->json(['message'=>'Changed post image successfully.']);
             }
             return \response()->json(['message'=>'Unable to change post image']);

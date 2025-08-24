@@ -25,6 +25,7 @@ class UserController extends Controller
             $user->update([
                 'isPassChangeReq'=>!($user->isPassChangeReq),
             ]);
+            activity()->on($user)->by(auth()->user())->log('Flagged Password change.');
             return \response()->json(['message'=>'change user password flag successfully.']);
         }else{
             return response('Access denied.',Response::HTTP_FORBIDDEN);
