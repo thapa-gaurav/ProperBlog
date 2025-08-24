@@ -66,4 +66,12 @@ class PostController extends Controller
             }
             return \response()->json(['message'=>'Unable to change post image']);
     }
+
+    public function detachImage($id,Request $request)
+    {
+        $post = Post::withMedia('image')->findOrFail($id);
+        $media = $post->getMedia('image')->first();
+        $post->detachMedia($media,'image');
+        return \response()->json(['message'=>'Image detached from post successfully']);
+    }
 }

@@ -17,6 +17,7 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::post('/passwordchange/{id}',[UserController::class,'flagPasswordChange'])->name('user.flagpasschange');
     Route::post('/admin/role',[RoleController::class,'createRole'])->name('create.role');
     Route::post('/post/image/replace/{id}',[PostController::class,'replaceImage'])->name('replace.image');
+    Route::post('/post/image/detach/{id}',[PostController::class,'detachImage'])->name('detach.image');
     Route::post('/admin/assignrole/',[RoleController::class,'assignRole'])->name('assign.role');
     Route::post('/admin/unassignrole',[RoleController::class,'unassignRole'])->name('unassign.role');
     Route::get('/admin/get/role',[RoleController::class,'getRoles'])->name('index.role');
