@@ -39,15 +39,14 @@ class PostController extends Controller
     }
 
     public function update($id,PostRequest $request){
-        dd($request);
         $request->validated();
-        if(auth()->user()->hasPermissionTo('update post')){
+//        if(auth()->user()->hasPermissionTo('update post')){
             $post = Post::findOrFail($id);
             $post->update($request->validated());
             activity()->on($post)->by(auth()->user())->log('Update one post.');
             return \response()->json(['message'=>'post edited successfully.']);
-        }
-        return response('Access denied.',Response::HTTP_FORBIDDEN);
+//        }
+//        return response('Access denied.',Response::HTTP_FORBIDDEN);
     }
 
     public function destroy($id)
