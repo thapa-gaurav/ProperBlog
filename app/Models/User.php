@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens ,HasRoles;
+    use HasFactory, Notifiable, HasApiTokens ,HasRoles, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -54,4 +56,9 @@ class User extends Authenticatable
 //    protected  $attributes = [
 //        'passChangeReq' =>false,
 //    ];
+
+    public  function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->logOnly(['name','password'])->setDescriptionForEvent(fn(string $eventName)=>"This model has been {$eventName}");
+    }
 }
