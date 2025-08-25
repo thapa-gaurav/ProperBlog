@@ -22,7 +22,7 @@ class AuthController extends Controller
             'isPassChangeReq' => false,
             'role_id'=> $request->role_id,
         ]);
-
+        activity()->log("New user was registered.");
          return response() -> json([
              'message'=>'New user registered.',
              'data'=> $newUser

@@ -15,7 +15,7 @@ class RoleController extends Controller
         $request->validate([
             'name' => ['required']
         ]);
-
+        activity()->by(auth()->user())->log("New role was created");
         Role::create(['name'=>$request->name]);
         return response()->json(['message'=>'New Role created']);
     }
@@ -30,7 +30,7 @@ class RoleController extends Controller
         $user = User::findOrFail($request->userid);
         $roleID = $request->roleid;
         $role = $user->assignRole(Role::findById($roleID));
-
+        activity()->on($user)->by(auth()->user())->log("Role was assigned to user");
         return response()->json(['Message'=>"Role was assigned  successfully.",
             'user'=>$role]);
 
@@ -46,6 +46,7 @@ class RoleController extends Controller
         $roleId = $request->roleid;
         $user = User::findOrFail($request->userid);
         $user->removeRole(Role::findById($roleId));
+        activity()->on($user)->by(auth()->user())->log("Role was unassigned from user");
         return response() ->json(['message'=>'Unassigned role']);
     }
 

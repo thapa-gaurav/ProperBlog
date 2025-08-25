@@ -15,6 +15,7 @@ class PermissionController extends Controller
         ]);
 
         $permission = Permission::create(['name'=>$request->permission]);
+        activity()->log("New permission was created");
         return response()->json(['message'=>'Permission was created.','permission'=>$permission]);
 
     }
@@ -29,7 +30,7 @@ class PermissionController extends Controller
         $role = Role::findById($request->roleid);
 
         $assignment = $role->givePermissionTo($permission);
-
+        activity()->on($role)->by(auth()->user())->log("Permission was assigned to role.");
         return response()->json(['message'=> 'Permission to give to role','Role'=>$assignment]);
     }
 
@@ -44,7 +45,7 @@ class PermissionController extends Controller
         $role = Role::findById($request->roleid);
 
         $unassignment = $role->revokePermissionTo($permission);
-
+        activity()->on($role)->by(auth()->user())->log("Permission was revoked from the role.");
         return response() ->json(['message'=>'Permission revoked successfully.','unassignment'=>$unassignment]);
     }
 }
