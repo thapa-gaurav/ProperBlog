@@ -21,6 +21,6 @@ class Post extends Model implements MediableInterface
 //    }
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults()->logOnly(['caption','title'])->setDescriptionForEvent(fn(string $eventName)=>"This model has been {$eventName}");
+        return LogOptions::defaults()->logOnly(['caption','text'])->setDescriptionForEvent(fn(string $eventName)=>"This model has been {$eventName}");
     }
 }
