@@ -25,7 +25,7 @@ class PostController extends Controller
         $request->validated();
         $post =  Post::create($request->validated());
         if($request->file('image')){
-            $media = MediaUploader::fromSource($request->file('image'))->withAltAttribute('alt images')->setAllowedAggregateTypes([Media::TYPE_IMAGE])->upload();
+            $media = MediaUploader::fromSource($request->file('image'))->setAllowedAggregateTypes([Media::TYPE_IMAGE])->toDisk('minio')->toDirectory('uploads')->upload();
             $post->attachMedia($media,'image');
         }
 //        activity()->on($post)->by(auth()->user())->log('Created new post');
@@ -63,7 +63,7 @@ class PostController extends Controller
                 'image' => 'required|image|mimes:jpeg,png,jpg,gif',
             ]);
             if($request->file('image')){
-                $media = MediaUploader::fromSource($request->file('image'))->withAltAttribute('alt images')->setAllowedAggregateTypes([Media::TYPE_IMAGE])->upload();
+                $media = MediaUploader::fromSource($request->file('image'))->setAllowedAggregateTypes([Media::TYPE_IMAGE])->toDisk('minio')->toDirectory('uploads')->upload();
                 $post = Post::withMedia('image')->findOrFail($id);
                 $post->syncMedia($media,'image');
 //                activity()->on($post)->by(auth()->user())->log('Changed image of post.');

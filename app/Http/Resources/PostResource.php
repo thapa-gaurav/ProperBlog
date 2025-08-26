@@ -19,7 +19,7 @@ class PostResource extends JsonResource
            'caption'=>$this->caption,
            'text'=>$this->text,
            'imageUrl'=>$this->when(!is_null($this->getMedia('image')->first()),function (){
-              return $this->getMedia('image')->first()->getDiskPath();
+              return $this->getMedia('image')->first()->getUrl();
            }),
            'createdAt'=>$this->created_at,
            'updatedAt'=>$this->updated_at
