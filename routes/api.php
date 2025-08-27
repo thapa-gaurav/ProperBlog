@@ -15,17 +15,21 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::get('/user/index',[UserController::class,'index'])->name('user.index');
     Route::delete('post/delete/{id}',[PostController::class,'destroy'])->name('post.delete');
     Route::post('/passwordchange/{id}',[UserController::class,'flagPasswordChange'])->name('user.flagpasschange');
-    Route::post('/admin/role',[RoleController::class,'createRole'])->name('create.role');
+    Route::post('/role/create',[RoleController::class,'createRole'])->name('create.role');
     Route::post('/post/image/replace/{id}',[PostController::class,'replaceImage'])->name('replace.image');
     Route::post('/post/image/detach/{id}',[PostController::class,'detachImage'])->name('detach.image');
     Route::post('/admin/assignrole/',[RoleController::class,'assignRole'])->name('assign.role');
     Route::post('/admin/unassignrole',[RoleController::class,'unassignRole'])->name('unassign.role');
-    Route::get('/admin/get/role',[RoleController::class,'getRoles'])->name('index.role');
+    Route::get('/role/index',[RoleController::class,'getRoles'])->name('index.role');
+    Route::delete('role/delete/{id}',[RoleController::class,'delete'])->name('delete.index');
+    Route::get('/role/permission/{id}',[RoleController::class,'getRolePermission'])->name('permissions.role');
+    Route::patch('/role/edit/{id}',[RoleController::class,'edit'])->name('role.edit');
     Route::post('/admin/assign/{roleId}',[RoleController::class,'unassignRole'])->name('unassign.role');
-    Route::post('/admin/makepermission/',[PermissionController::class,'createPermission'])->name('create.permisssion');
+    Route::post('/permission/create',[PermissionController::class,'createPermission'])->name('create.permisssion');
     Route::post('/admin/givePermission',[PermissionController::class,'assignToRole'])->name('assign.permission');
-    Route::post('/admin/revokepermission',[PermissionController::class,'revokePermission'])->name('revoke.permission');
-    Route::get('/admin/get/permission',[RoleController::class,'getPermissions'])->name('getPermission');
+    Route::patch('/permission/edit/{id}',[PermissionController::class,'edit'])->name('permission.edit');
+    Route::delete('/permission/delete/{id}',[PermissionController::class,'delete'])->name('revoke.permission');
+    Route::get('/permission/index ',[PermissionController::class,'getPermissions'])->name('getPermission');
 });
 Route::middleware(['auth:sanctum', EnsurePasswordSecure::class])->prefix('posts')->group(function(){
     Route::get('/index',[PostController::class,'index'])->name('post.index');
