@@ -13,6 +13,10 @@ use Spatie\Permission\Models\Role;
 
 Route::middleware(['auth:sanctum'])->group(function (){
     Route::get('/user/index',[UserController::class,'index'])->name('user.index');
+    Route::post('/user/register',[UserController::class,'register'])->name('user.register');
+    Route::delete('/user/delete/{id}',[UserController::class,'delete'])->name('user.delete');
+    Route::patch('/user/role/edit/{id}',[UserController::class,'editRole'])->name('user.edit');
+    Route::get('/user/role/get/{id}',[UserController::class,'getUserRoles'])->name('user.roles');
     Route::delete('post/delete/{id}',[PostController::class,'destroy'])->name('post.delete');
     Route::post('/passwordchange/{id}',[UserController::class,'flagPasswordChange'])->name('user.flagpasschange');
     Route::post('/role/create',[RoleController::class,'createRole'])->name('create.role');

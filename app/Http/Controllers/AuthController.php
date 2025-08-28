@@ -20,7 +20,6 @@ class AuthController extends Controller
             'email'=>$request -> email,
             'password'=>$request->password,
             'isPassChangeReq' => false,
-            'role_id'=> $request->role_id,
         ]);
         activity()->log("New user was registered.");
          return response() -> json([
