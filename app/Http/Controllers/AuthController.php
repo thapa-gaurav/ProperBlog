@@ -15,42 +15,42 @@ class AuthController extends Controller
     {
         //request and resource file should be separate.
         $request->validated();
-         $newUser = User::create([
+        $newUser = User::create([
             'name' => $request->name,
-            'email'=>$request -> email,
-            'password'=>$request->password,
+            'email' => $request->email,
+            'password' => $request->password,
             'isPassChangeReq' => false,
         ]);
         activity()->log("New user was registered.");
-         return response() -> json([
-             'message'=>'New user registered.',
-             'data'=> $newUser
-         ]);
+        return response()->json([
+            'message' => 'New user registered.',
+            'data' => $newUser
+        ]);
     }
 
     public function login(AuthRequest $request): JsonResponse
     {
         $request->validated();
-        $user = User::where('email',$request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
-        if(!$user || !Hash::check($request->password,$user->password)){
-            return response()->json(['message'=>"invalid credentials."]);
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => "invalid credentials."]);
         }
         $token = $user->createToken('token-name')->plainTextToken;
-        return  response()->json([
-            'user'=>$user,
-            'token'=>$token
+        return response()->json([
+            'user' => $user,
+            'token' => $token
         ]);
     }
 
     public function logout(): JsonResponse
     {
         auth()->user()->tokens()->delete();
-        return response()->json('Logged out successfully.');
+        return response()->json(['message' => 'Logged out successfully.']);
     }
 
     public function get(): ?Authenticatable
     {
-        return  auth()->user();
+        return auth()->user();
     }
 }

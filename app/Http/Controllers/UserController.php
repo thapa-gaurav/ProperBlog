@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Rules\MatchOldPassword;
+use App\Rules\StrongPassword;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -92,6 +94,24 @@ class UserController extends Controller
         } else {
             return response('Access denied.', Response::HTTP_FORBIDDEN);
 
+        }
+    }
+
+    public function changePassword($id,Request $request){
+        $request->validate([
+            'current_password'=>['required',new MatchOldPassword],
+            'password'=>['required','confirmed',new StrongPassword],
+            'password_confirmation'=>['required']
+        ]);
+
+        $user = User::findOrFail($id);
+        if($user){
+            $user->update([
+                'password'=> $request->password,
+            ]);
+            return \response()->json(['message'=>'Password was changed successFully.']);
+        }else{
+            return \response()->json(['message'=>'User not found.']);
         }
     }
 }

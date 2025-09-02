@@ -17,6 +17,7 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::delete('/user/delete/{id}',[UserController::class,'delete'])->name('user.delete');
     Route::patch('/user/role/edit/{id}',[UserController::class,'editRole'])->name('user.edit');
     Route::get('/user/role/get/{id}',[UserController::class,'getUserRoles'])->name('user.roles');
+    Route::patch('/user/changepassword/{id}',[UserController::class,'changePassword'])->name('user.changepassword');
     Route::delete('post/delete/{id}',[PostController::class,'destroy'])->name('post.delete');
     Route::post('/passwordchange/{id}',[UserController::class,'flagPasswordChange'])->name('user.flagpasschange');
     Route::post('/role/create',[RoleController::class,'createRole'])->name('create.role');
@@ -34,6 +35,8 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::patch('/permission/edit/{id}',[PermissionController::class,'edit'])->name('permission.edit');
     Route::delete('/permission/delete/{id}',[PermissionController::class,'delete'])->name('revoke.permission');
     Route::get('/permission/index ',[PermissionController::class,'getPermissions'])->name('getPermission');
+    Route::post('/logout',[AuthController::class,'logout'])->name('user.logout');
+    Route::get('/user/get/current',[AuthController::class,'get'])->name('user.get');
 });
 Route::middleware(['auth:sanctum', EnsurePasswordSecure::class])->prefix('posts')->group(function(){
     Route::get('/index',[PostController::class,'index'])->name('post.index');
@@ -45,10 +48,6 @@ Route::middleware(['auth:sanctum', EnsurePasswordSecure::class])->prefix('posts'
 Route::post('/register',[AuthController::class,'register'])->name('user.register');
 Route::post('/login',[AuthController::class,'login'])->name('user.login');
 
-Route::middleware(['auth:sanctum'])->group(function (){
-    Route::post('/logout',[AuthController::class,'logout'])->name('user.logout');
-    Route::get('/get',[AuthController::class,'get'])->name('user.get');
-});
 
 //Route::group(['middleware'=>['auth:sanctum','role:admin']],function (){
 //    Route::post('post/{id}/delete',[PostController::class,'destroy'])->name('post.delete');
