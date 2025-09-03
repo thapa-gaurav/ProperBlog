@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
@@ -38,7 +39,7 @@ class AuthController extends Controller
         }
         $token = $user->createToken('token-name')->plainTextToken;
         return response()->json([
-            'user' => $user,
+            'user' => new UserResource($user),
             'token' => $token
         ]);
     }
@@ -49,8 +50,8 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out successfully.']);
     }
 
-    public function get(): ?Authenticatable
+    public function get()
     {
-        return auth()->user();
+        return new UserResource(auth()->user());
     }
 }
