@@ -26,7 +26,11 @@ class PostController extends Controller
             $request->validated();
             $post = Post::create($request->validated());
             if ($request->file('image')) {
-                $media = MediaUploader::fromSource($request->file('image'))->setAllowedAggregateTypes([Media::TYPE_IMAGE])->toDisk('minio')->toDirectory('uploads')->upload();
+                $media = MediaUploader::fromSource($request->file('image'))
+                    ->setAllowedAggregateTypes([Media::TYPE_IMAGE])
+                    ->toDisk('minio')
+                    ->toDirectory('uploads')
+                    ->upload();
                 $post->attachMedia($media, 'image');
             }
 //        activity()->on($post)->by(auth()->user())->log('Created new post');
@@ -44,7 +48,6 @@ class PostController extends Controller
             return new PostResource($post);
         }
         return response('Access denied.', Response::HTTP_FORBIDDEN);
-
     }
 
     public function update($id, PostRequest $request)
